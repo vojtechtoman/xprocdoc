@@ -1,6 +1,6 @@
 <xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xd="http://www.emc.com/documentum/xml/xproc/doc"
+                xmlns:xd="http://github.com/vojtechtoman/xprocdoc"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns="http://www.w3.org/1999/xhtml">
 
@@ -29,7 +29,7 @@
 
   <xsl:template name="create-index">
     <xsl:variable name="main-title" select="concat($product, ' XProc API documentation')"/>
-    <xsl:result-document format="xhtml-frameset" href="{resolve-uri('index.html', $output-base-uri)}">
+    <xsl:result-document format="xhtml-frameset" href="{xd:resolve-uri('index.html', $output-base-uri)}">
       <html>
         <xsl:call-template name="head">
           <xsl:with-param name="title" select="$main-title"/>
@@ -53,7 +53,8 @@
   <!-- -->
 
   <xsl:template name="create-library-index">
-    <xsl:result-document format="xhtml-frameset" href="{resolve-uri('libraries.html', $output-base-uri)}">
+    <xsl:result-document format="xhtml-frameset"
+                         href="{xd:resolve-uri('libraries.html', $output-base-uri)}">
       <html>
         <xsl:call-template name="head">
           <xsl:with-param name="title">Library Index</xsl:with-param>
@@ -80,7 +81,7 @@
 
   <xsl:template name="create-overview">
     <xsl:variable name="overview-title" select="if ($product != '') then concat ('Overview (', $product, ')') else 'Overview'"/>
-    <xsl:result-document format="xhtml-frameset" href="{resolve-uri('overview.html', $output-base-uri)}">
+    <xsl:result-document format="xhtml-frameset" href="{xd:resolve-uri('overview.html', $output-base-uri)}">
       <html>
         <xsl:call-template name="head">
           <xsl:with-param name="title" select="$overview-title"/>
@@ -148,7 +149,7 @@
 
   <xsl:template match="xd:library" mode="detail">
     <xsl:variable name="source-href"><xsl:value-of select="xd:relativize(../@href, $input-base-uri)"/></xsl:variable>
-    <xsl:variable name="result-href"><xsl:value-of select="resolve-uri(xd:generate-output-uri(.), $output-base-uri)"/></xsl:variable>
+    <xsl:variable name="result-href"><xsl:value-of select="xd:resolve-uri(xd:generate-output-uri(.), $output-base-uri)"/></xsl:variable>
     <xsl:result-document format="xhtml-frameset" href="{$result-href}">
       <html>
         <xsl:call-template name="head">
@@ -203,7 +204,7 @@
   <!-- -->
 
   <xsl:template name="create-step-index">
-    <xsl:result-document format="xhtml-frameset" href="{resolve-uri('steps.html', $output-base-uri)}">
+    <xsl:result-document format="xhtml-frameset" href="{xd:resolve-uri('steps.html', $output-base-uri)}">
       <html>
         <xsl:call-template name="head">
           <xsl:with-param name="title">Step Index</xsl:with-param>
@@ -268,7 +269,7 @@
     <xsl:variable name="source-href" select="xd:relativize(ancestor::xd:source/@href, $input-base-uri)"/>
     <xsl:variable name="step-local-name" select="xd:step-local-name(@local-name)"/>
     <xsl:variable name="step-namespace-uri" select="xd:step-namespace-uri(@namespace-uri)"/>
-    <xsl:variable name="result-href"><xsl:value-of select="resolve-uri(xd:generate-output-uri(.), $output-base-uri)"/></xsl:variable>
+    <xsl:variable name="result-href"><xsl:value-of select="xd:resolve-uri(xd:generate-output-uri(.), $output-base-uri)"/></xsl:variable>
     <xsl:result-document format="xhtml-frameset" href="{$result-href}">
       
       <html>
@@ -425,6 +426,12 @@
       <xsl:otherwise><xsl:value-of select="$namespace-uri"/></xsl:otherwise>
     </xsl:choose>
   </xsl:function>
+
+  <xsl:function name="xd:resolve-uri" as="xs:string"> 
+    <xsl:param name="uri" as="xs:string"/> 
+    <xsl:param name="base-uri" as="xs:string"/> 
+    <xsl:value-of select="if ($base-uri eq '') then $uri else resolve-uri($uri, $base-uri)"/>
+  </xsl:function> 
 
   <xsl:function name="xd:relativize" as="xs:string">
     <!-- Beware: This is a very naive implementation of URI.relativize() -->

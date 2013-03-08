@@ -1,8 +1,8 @@
 <p:declare-step version="1.0"
             xmlns:p="http://www.w3.org/ns/xproc"
             xmlns:c="http://www.w3.org/ns/xproc-step"
-            xmlns:xd="http://www.emc.com/documentum/xml/xproc/doc"
-            xmlns:xderr="http://www.emc.com/documentum/xml/xproc/doc-err"
+            xmlns:xd="http://github.com/vojtechtoman/xprocdoc"
+            xmlns:xderr="http://github.com/vojtechtoman/xprocdoc-err"
             type="xd:xprocdoc" name="xprocdoc" exclude-inline-prefixes="#all">
 
   <p:input port="source" sequence="true" primary="true"/>
