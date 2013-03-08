@@ -74,9 +74,9 @@ Documentation for the XProc pipelines must be specified inline, in the actual so
 Generating XHTML documentation
 ------------------------------
 
-To generate the XHTML documentation for a set of XProc files, simply pass the files to the `xprocdoc.xpl` pipeline's source input port. The pipeline will process the XProc sources and will generate a set of XHTML files in the current working directory. The file `index.html` can be used to access the documentation overview page.
+To generate the XHTML documentation for a set of XProc files, simply pass the files to `source` input port of the `xd:xprocdoc` pipeline. The pipeline will process the XProc sources and will generate a set of XHTML files in the current working directory (or in a location specified using the `output-base-uri` option). The file `index.html` can be used to access the documentation overview page.
 
-The `xprocdoc.xpl` pipeline generates documentation for all XProc steps that are:
+The `xd:xprocdoc` pipeline generates documentation for all XProc steps that are:
 
 - direct children of `p:library` and specify the `type` attribute;
 
@@ -98,14 +98,14 @@ The documentation generation pipeline also follows `p:import` statements in XPro
 Customizing the XHTML output
 ----------------------------
 
-The properties of the XHTML output can be customized by passing parameters to the XSLT stylesheet. The stylesheet accepts the following parameters (all of which are optional):
+The properties of the XHTML output can be customized by the following options (all of which are optional):
 
 - `product` - The name of the product that will appear on the generated overview XHTML page.
 
-- `input-base-uri` - The base URI of the source XProc pipelines. This parameter can be used to customize the way the source URIs are presented in the generated XHTML. For example, if the source pipelines `src1.xpl` and `src2.xpl` are stored in the directory with the base URI `file:/home/fred/pipelines/`, setting the `input-base-uri` parameter to `file:/home/fred/` will cause the pipelines to appear as `pipelines/src1.xpl` and `pipelines/src2.xpl`. If the `input-base-uri` parameter is left unspecified, the pipelines will appear as `file:/home/fred/pipelines/src1.xpl` and `file:/home/fred/pipelines/src2.xpl`.
+- `input-base-uri` - The base URI of the source XProc pipelines. This option can be used to customize the way the source URIs are presented in the generated XHTML. For example, if the source pipelines `src1.xpl` and `src2.xpl` are stored in the directory with the base URI `file:/home/fred/pipelines/`, setting the `input-base-uri` option to `file:/home/fred/` will cause the pipelines to appear as `pipelines/src1.xpl` and `pipelines/src2.xpl`. If the `input-base-uri` option is left unspecified, the pipelines will appear as `file:/home/fred/pipelines/src1.xpl` and `file:/home/fred/pipelines/src2.xpl`.
 
 - `output-base-uri` - The base URI of the directory where the generated XHTML output is stored. If not specified, the current working directory will be used.
 
 - `overview-file` - The URI of a file with an XHTML boilerplate text that will be inserted in the generated overview page. If not specified, no boilerplate text will be inserted.
 
-The `xprocdoc.xpl` pipeline and the `xd2html.xsl` XSLT stylesheet are independent. The XProc pipeline is responsible for extracting the documentation from XProc source files and for generating an intermediate XML representation that can be then transformed into XHTML using the stylesheet. It should be relatively straightforward to modify the stylesheet to customize the XHTML output, or to use a completely different stylesheet altogether. Processing the intermediate XML data by other means should also be possible.
+The `xd:xprocdoc` pipeline and the `xd2html.xsl` XSLT stylesheet that it uses are independent. The XProc pipeline is responsible for extracting the documentation from XProc source files and for generating an intermediate XML representation that can be then transformed into XHTML using the stylesheet. It should be relatively straightforward to modify the stylesheet to customize the XHTML output, or to use a completely different stylesheet altogether. Processing the intermediate XML data by other means should also be possible.

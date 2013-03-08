@@ -2,7 +2,8 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xd="http://github.com/vojtechtoman/xprocdoc"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns="http://www.w3.org/1999/xhtml">
+                xmlns="http://www.w3.org/1999/xhtml"
+                exclude-result-prefixes="xd xs">
 
   <xsl:param name="product"/>
   <xsl:param name="input-base-uri"/>
@@ -93,22 +94,41 @@
             <xsl:copy-of select="doc($overview-file)"/>
           </xsl:if>
 
-          <xsl:if test="//xd:library">
-            <h3>Libraries</h3>
-            <table border="1">
-              <thead>
-                <tr>
-                  <td>Location</td>
-                  <td>Description</td>
-                </tr>
-              </thead>
-              <tbody>
-                <xsl:apply-templates select="//xd:library" mode="table-row">
-                  <xsl:sort select="xd:relativize(../@href, $input-base-uri)"/>
-                </xsl:apply-templates>
-              </tbody>
-            </table>
-          </xsl:if>
+          <xsl:choose>
+            <xsl:when test="//xd:library">
+              <h3>Libraries</h3>
+              <table border="1">
+                <thead>
+                  <tr>
+                    <td>Location</td>
+                    <td>Description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <xsl:apply-templates select="//xd:library" mode="table-row">
+                    <xsl:sort select="xd:relativize(../@href, $input-base-uri)"/>
+                  </xsl:apply-templates>
+                </tbody>
+              </table>
+            </xsl:when>
+            <xsl:otherwise>
+              <h3>Steps</h3>
+              <table border="1">
+                <thead>
+                  <tr>
+                    <td>Local Name</td>
+                    <td>Namespace URI</td>
+                    <td>Description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <xsl:apply-templates select="//xd:step" mode="table-row">
+                    <xsl:sort select="xd:relativize(../@href, $input-base-uri)"/>
+                  </xsl:apply-templates>
+                </tbody>
+              </table>
+            </xsl:otherwise>
+          </xsl:choose>
         </body>
       </html>
     </xsl:result-document>
